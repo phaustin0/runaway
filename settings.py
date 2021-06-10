@@ -9,4 +9,10 @@ title = 'The Runaway'
 fps = 60
 
 # colours
-black = '#000'
+black = (0, 0, 0)
+blue = (0, 0, 255)
+
+# player settings
+player_layer = 2
+player_speed = 9
+

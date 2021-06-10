@@ -2,6 +2,7 @@
 import pygame
 import sys
 from settings import *
+from player import *
 
 
 # game class
@@ -31,6 +32,8 @@ class Game:
         # create sprite groups
         self.all_sprites = pygame.sprite.LayeredUpdates()
 
+        Player(self)
+
     # event handling
     def events(self):
         for event in pygame.event.get():  # check through each event
@@ -49,7 +52,7 @@ class Game:
         self.screen.fill(black)
 
         # draw all sprites on the screen
-        self.all_sprites.draw()
+        self.all_sprites.draw(self.screen)
 
         # make sure everything is running at a constant fps
         self.clock.tick(fps)
