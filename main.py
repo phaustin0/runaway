@@ -31,6 +31,7 @@ class Game:
 
         # create sprite groups
         self.all_sprites = pygame.sprite.LayeredUpdates()
+        self.player_bullets = pygame.sprite.LayeredUpdates()
 
         Player(self)
 
