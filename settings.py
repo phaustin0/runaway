@@ -20,16 +20,21 @@ yellow = (255, 255, 0)
 player_layer = 2
 player_speed = 9
 player_max_health = 10
+player_bullet_speed = 40
+player_bullet_damage = 10
+player_bullet_colour = yellow
+player_bullet_shoot_interval = 50
 
 # bullet settings
 bullet_layer = 1
-bullet_speed = 40
-bullet_damage = 10
 bullet_time_to_kill = 1000
-bullet_shoot_interval = 50
 
 # enemy settings
 enemy_layer = 3
 enemy_speed = 5
 enemy_max_health = 20
+enemy_bullet_speed = 5
+enemy_bullet_damage = 10
+enemy_bullet_colour = red
+enemy_bullet_shoot_interval = 100
 

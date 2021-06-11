@@ -34,6 +34,7 @@ class Game:
 
         # create sprite groups
         self.all_sprites = pygame.sprite.LayeredUpdates()
+        self.players = pygame.sprite.LayeredUpdates()
         self.enemies = pygame.sprite.LayeredUpdates()
         self.player_bullets = pygame.sprite.LayeredUpdates()
         self.enemy_bullets = pygame.sprite.LayeredUpdates()
@@ -56,7 +57,7 @@ class Game:
     # draw stuff
     def draw(self):
         # fill screen
-        self.screen.fill(blue)
+        self.screen.fill(black)
 
         # draw all sprites on the screen
         self.all_sprites.draw(self.screen)
