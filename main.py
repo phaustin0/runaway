@@ -3,6 +3,7 @@ import pygame
 import sys
 from settings import *
 from player import *
+from enemy import *
 
 
 # game class
@@ -24,6 +25,8 @@ class Game:
         # playing variable for whether the game is being played
         self.playing = False
 
+        # player
+
     # create a new game
     def new(self):
         # start playing
@@ -31,9 +34,12 @@ class Game:
 
         # create sprite groups
         self.all_sprites = pygame.sprite.LayeredUpdates()
+        self.enemies = pygame.sprite.LayeredUpdates()
         self.player_bullets = pygame.sprite.LayeredUpdates()
+        self.enemy_bullets = pygame.sprite.LayeredUpdates()
 
-        Player(self)
+        self.player = Player(self)
+        Enemy(self, 0, 0, self.player)
 
     # event handling
     def events(self):
@@ -50,7 +56,7 @@ class Game:
     # draw stuff
     def draw(self):
         # fill screen
-        self.screen.fill(black)
+        self.screen.fill(blue)
 
         # draw all sprites on the screen
         self.all_sprites.draw(self.screen)

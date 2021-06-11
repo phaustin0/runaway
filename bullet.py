@@ -2,6 +2,7 @@
 import pygame
 from settings import *
 
+
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, game, player, direction):
         self.game = game
@@ -22,7 +23,7 @@ class Bullet(pygame.sprite.Sprite):
 
         # set the image of the bullet
         self.image = pygame.Surface([self.width, self.height])
-        pygame.draw.circle(self.image, yellow, (5, 5, ), 5)
+        pygame.draw.circle(self.image, yellow, (5, 5), 5)
 
         # get the rectangle of bullet
         self.rect = self.image.get_rect()

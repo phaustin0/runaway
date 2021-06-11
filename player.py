@@ -20,8 +20,7 @@ class Player(pygame.sprite.Sprite):
 
         # get the players rectangele box thing
         self.rect = self.image.get_rect()
-        self.rect.x = (width - 50) / 2
-        self.rect.y = (height - 50) / 2
+        self.rect.center = (width / 2, height / 2)
 
         # set the player's initial vertical and horizontal velocity to 0
         self.xv = 0
@@ -51,8 +50,8 @@ class Player(pygame.sprite.Sprite):
         self.yv = 0
         
         # draw the shoot bar
-#         self.draw_shoot_bar()
-#         pygame.display.update()
+        self.draw_shoot_bar()
+        pygame.display.update()
 
     # player movement
     def movement(self):
@@ -66,12 +65,20 @@ class Player(pygame.sprite.Sprite):
         # keys
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w]:  # up
+            for sprite in self.game.all_sprites:
+                sprite.rect.y += player_speed
             self.yv -= player_speed
         elif keys[pygame.K_s]:  # down
+            for sprite in self.game.all_sprites:
+                sprite.rect.y -= player_speed
             self.yv += player_speed
         if keys[pygame.K_a]:  # left
+            for sprite in self.game.all_sprites:
+                sprite.rect.x += player_speed
             self.xv -= player_speed
         elif keys[pygame.K_d]:  # right
+            for sprite in self.game.all_sprites:
+                sprite.rect.x -= player_speed
             self.xv += player_speed
 
         # mouse
