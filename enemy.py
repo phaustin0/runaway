@@ -40,7 +40,8 @@ class Enemy(pygame.sprite.Sprite):
         self.can_shoot = True
 
         # enemy health
-        self.health = enemy_max_health
+        self.target_health = enemy_max_health
+        self.current_health = enemy_max_health
 
     # update the enemy
     def update(self):
@@ -62,7 +63,7 @@ class Enemy(pygame.sprite.Sprite):
         self.check_collisions()
 
         # destroy when health is less than zero
-        if self.health <= 0:
+        if self.target_health <= 0:
             self.kill()
 
     # movement of the enemy
@@ -90,11 +91,40 @@ class Enemy(pygame.sprite.Sprite):
         # set the direction
         self.direction = pygame.Vector2(1, 0).rotate(-(angle - 90))
 
+    # damage enemy
+    def damage(self, amount):
+        self.target_health -= amount
+
     # check for collisions
     def check_collisions(self):
         # check if hit by player bullet
         bullet_hits = pygame.sprite.spritecollide(self, self.game.player_bullets, True)
         if bullet_hits:
-            for bullet in bullet_hits:
-                self.health -= bullet.damage
+            self.damage(bullet_hits[0].damage)
+
+    # draw health bar
+    def draw_health_bar(self):
+        transition_width = 0
+        transition_colour = red
+        health_animation_speed = 2
+
+        if self.current_health < self.target_health:
+            self.current_health += health_animation_speed
+            transition_width = int((self.target_health - self.current_health) / enemy_max_health * 150)
+            transition_colour = green
+        if self.current_health > self.target_health:
+            self.current_health -= health_animation_speed
+            transition_width = int((self.current_health - self.target_health) / enemy_max_health * 100)
+            transition_colour = yellow
+
+        health_rect = pygame.Rect(self.rect.centerx - 75, self.rect.bottom + 10, self.target_health / (enemy_max_health / 150), 25)
+        transition_rect = pygame.Rect(health_rect.right, self.rect.bottom + 10, transition_width, 25)
+
+        if self.target_health != enemy_max_health:
+            pygame.draw.rect(self.game.screen, dark_grey, (self.rect.centerx - 75, self.rect.bottom + 10, 150, 25))
+            pygame.draw.rect(self.game.screen, red, health_rect)
+            pygame.draw.rect(self.game.screen, transition_colour, transition_rect)
+            heart_img = pygame.image.load('img/heart.png')
+            heart_img_rect = heart_img.get_rect(center=(health_rect.left + 12, health_rect.centery))
+            self.game.screen.blit(heart_img, heart_img_rect)
 

@@ -40,7 +40,7 @@ class Game:
         self.enemy_bullets = pygame.sprite.LayeredUpdates()
 
         self.player = Player(self)
-        Enemy(self, 0, 0, self.player)
+        Enemy(self, 100, 100, self.player)
 
     # event handling
     def events(self):
@@ -64,6 +64,13 @@ class Game:
 
         # make sure everything is running at a constant fps
         self.clock.tick(fps)
+
+        # draw all bars
+        self.player.draw_shoot_bar()
+        self.player.draw_health_bar()
+
+        for enemy in self.enemies:
+            enemy.draw_health_bar()
 
         # update the screen
         pygame.display.update()

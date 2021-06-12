@@ -35,7 +35,15 @@ class Player(pygame.sprite.Sprite):
         self.can_shoot = True
 
         # set players health
-        self.health = player_max_health
+        self.target_health = player_max_health
+        self.current_health = player_max_health
+
+        # health bars
+        self.health_rect = pygame.Rect(35, 25, self.current_health / player_max_health * 250, 25)
+        self.transition_rect = pygame.Rect(self.health_rect.right, 25, 0, 25)
+
+        # health timer
+        self.health_timer = pygame.time.get_ticks()
 
     # update the player
     def update(self):
@@ -53,13 +61,13 @@ class Player(pygame.sprite.Sprite):
         # check for any collisions
         self.check_collisions()
         
-        # draw the shoot bar
-        self.draw_shoot_bar()
-        pygame.display.update()
+        # heal player
+        self.heal(player_heal_amount)
 
         # destroy if health is less than 0
-        if self.health <= 0:
+        if self.target_health <= 0:
             self.kill()
+            self.game.playing = False
 
     # player movement
     def movement(self):
@@ -75,20 +83,24 @@ class Player(pygame.sprite.Sprite):
         # keys
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w]:  # up
-#             for sprite in self.game.all_sprites:
-#                 sprite.rect.y += player_speed
+            if self.rect.top < 50:
+                for sprite in self.game.all_sprites:
+                    sprite.rect.y += player_speed
             self.yv -= player_speed
         elif keys[pygame.K_s]:  # down
-#             for sprite in self.game.all_sprites:
-#                 sprite.rect.y -= player_speed
+            if self.rect.bottom > height - 50:
+                for sprite in self.game.all_sprites:
+                    sprite.rect.y -= player_speed
             self.yv += player_speed
         if keys[pygame.K_a]:  # left
-#             for sprite in self.game.all_sprites:
-#                 sprite.rect.x += player_speed
+            if self.rect.left < 50:
+                for sprite in self.game.all_sprites:
+                    sprite.rect.x += player_speed
             self.xv -= player_speed
         elif keys[pygame.K_d]:  # right
-#             for sprite in self.game.all_sprites:
-#                 sprite.rect.x -= player_speed
+            if self.rect.right > width - 50:
+                for sprite in self.game.all_sprites:
+                    sprite.rect.x -= player_speed
             self.xv += player_speed
 
         # mouse
@@ -113,11 +125,47 @@ class Player(pygame.sprite.Sprite):
 
         self.direction = pygame.Vector2(1, 0).rotate(-(angle + 90))
 
+    # heal the player
+    def heal(self, amount):
+        time_passed = pygame.time.get_ticks() - self.health_timer
+        if time_passed > player_heal_time * 1000:
+            self.target_health += amount
+            self.health_timer = pygame.time.get_ticks()
+        self.target_health = min(self.target_health, player_max_health)
+
     # draw the shoot bar
     def draw_shoot_bar(self):
         angle = ((player_bullet_shoot_interval - self.bullet_timer) / player_bullet_shoot_interval) * math.pi
         pygame.draw.arc(self.game.screen, light_grey, (20, height - 90, 150, 150), 0, math.pi, 20)
         pygame.draw.arc(self.game.screen, dark_grey, (20, height - 90, 150, 150), 0, angle, 20)
+
+    # draw the health bar
+    def draw_health_bar(self):
+        transition_width = 0
+        transition_colour = red
+        health_animation_speed = 2
+
+        if self.current_health < self.target_health:
+            self.current_health += health_animation_speed
+            transition_width = int((self.target_health - self.current_health) / player_max_health * 250)
+            transition_colour = green
+
+            self.health_rect = pygame.Rect(35, 25, self.current_health / player_max_health * 250, 25)
+            self.transition_rect = pygame.Rect(self.health_rect.right, 25, transition_width, 25)
+        if self.current_health > self.target_health:
+            self.current_health -= health_animation_speed
+            transition_width = -int((self.target_health - self.current_health) / player_max_health * 250)
+            transition_colour = yellow
+
+            self.health_rect = pygame.Rect(35, 25, self.target_health / player_max_health * 250, 25)
+            self.transition_rect = pygame.Rect(self.health_rect.right, 25, transition_width, 25)
+
+        pygame.draw.rect(self.game.screen, dark_grey, (35, 25, 250, 25))
+        pygame.draw.rect(self.game.screen, red, self.health_rect)
+        pygame.draw.rect(self.game.screen, transition_colour, self.transition_rect)
+        heart_img = pygame.image.load('img/heart.png')
+        heart_img_rect = heart_img.get_rect(center=(self.health_rect.left + 12, self.health_rect.centery))
+        self.game.screen.blit(heart_img, heart_img_rect)
 
     # check for collisions
     def check_collisions(self):
@@ -131,5 +179,8 @@ class Player(pygame.sprite.Sprite):
         bullet_hits = pygame.sprite.spritecollide(self, self.game.enemy_bullets, True)
         if bullet_hits:
             for bullet in bullet_hits:
-                self.health -= bullet.damage
+                self.target_health -= bullet.damage
+
+                # reset the health timer
+                self.health_timer = pygame.time.get_ticks()
 
