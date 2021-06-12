@@ -56,8 +56,10 @@ class Enemy(pygame.sprite.Sprite):
 
         # shoot
         if self.can_shoot:
-            Bullet(self.game, self, enemy_bullet_colour, enemy_bullet_speed, enemy_bullet_damage, -self.direction)
-            self.can_shoot = False
+            # check if the enemy is on the screen before shooting
+            if self.rect.centerx > 0 and self.rect.centerx < width and self.rect.centery > 0 and self.rect.centery < height:
+                Bullet(self.game, self, enemy_bullet_colour, enemy_bullet_speed, enemy_bullet_damage, -self.direction)
+                self.can_shoot = False
 
         # check for collisions
         self.check_collisions()
