@@ -3,15 +3,16 @@
 # window settings
 width = 900
 height = 600
-title = 'The Runaway'
+title = 'The Runaway - Made by Faustino'
 
 # game settings
 fps = 60
 
 # colours
 black = (0, 0, 0)
+white = '#e4dfda'
+light_grey = '#afafaf'
 dark_grey = '#626267'
-light_grey = (175, 175, 175)
 red = '#fe5f55'
 # green = '#7cae7a'
 green = '#5fad41'
@@ -23,7 +24,7 @@ player_layer = 2
 player_speed = 9
 player_max_health = 200
 player_heal_time = 2
-player_heal_amount = player_max_health // 4
+player_heal_amount = player_max_health // 3.2
 player_bullet_speed = 40
 player_bullet_damage = 100
 player_bullet_colour = yellow

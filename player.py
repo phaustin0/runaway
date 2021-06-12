@@ -135,9 +135,11 @@ class Player(pygame.sprite.Sprite):
 
     # draw the shoot bar
     def draw_shoot_bar(self):
-        angle = ((player_bullet_shoot_interval - self.bullet_timer) / player_bullet_shoot_interval) * math.pi
-        pygame.draw.arc(self.game.screen, light_grey, (20, height - 90, 150, 150), 0, math.pi, 20)
-        pygame.draw.arc(self.game.screen, dark_grey, (20, height - 90, 150, 150), 0, angle, 20)
+        pygame.draw.rect(self.game.screen, dark_grey, (35, 80, 250, 25))
+        pygame.draw.rect(self.game.screen, light_grey, (35, 80, self.bullet_timer / player_bullet_shoot_interval * 250, 25))
+        gun_img = pygame.image.load('img/gun.png')
+        gun_img_rect = gun_img.get_rect(center=(35 + 7, 80 + 14))
+        self.game.screen.blit(gun_img, gun_img_rect)
 
     # draw the health bar
     def draw_health_bar(self):
