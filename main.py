@@ -55,6 +55,9 @@ class Game:
                 # exit the loop
                 self.playing = False
                 self.running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    Enemy(self, 600, 600, self.player)
 
     # update game
     def update(self):

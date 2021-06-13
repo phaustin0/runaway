@@ -18,8 +18,11 @@ green = '#5fad41'
 blue = (0, 0, 255)
 yellow = '#ffb140'
 
+# background settings
+bg_layer = 1
+
 # player settings
-player_layer = 3
+player_layer = 4
 player_speed = 9
 player_max_health = 200
 player_heal_time = 2
@@ -30,11 +33,11 @@ player_bullet_colour = yellow
 player_bullet_shoot_interval = 50
 
 # bullet settings
-bullet_layer = 2
+bullet_layer = 3
 bullet_time_to_kill = 1000
 
 # enemy settings
-enemy_layer = 4
+enemy_layer = 5
 enemy_speed = 5
 enemy_max_health = 300
 enemy_bullet_speed = 25
@@ -46,5 +49,5 @@ enemy_bullet_shoot_interval = 100
 planet_width = 100
 planet_height = 100
 planet_radius = planet_width // 2
-planet_layer = 1
+planet_layer = 2
 

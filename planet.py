@@ -19,8 +19,8 @@ class Planet(pygame.sprite.Sprite):
         self.y = y
 
         # colour of planet
-        colour = choice(["blue", "green", "pink", "purple", "red", "yellow"])
-        image_key = {
+        self.colour = choice(["blue", "green", "pink", "purple", "red", "yellow"])
+        self.image_key = {
             "blue": pygame.image.load("img/planets/blue_planet.png"),
             "green": pygame.image.load("img/planets/green_planet.png"),
             "pink": pygame.image.load("img/planets/pink_planet.png"),
@@ -30,7 +30,7 @@ class Planet(pygame.sprite.Sprite):
         }
 
         # create the image of the planet
-        self.image = image_key[colour]
+        self.image = self.image_key[self.colour]
         self.og_image = self.image.copy()
 
         # get the rectangle of the planet

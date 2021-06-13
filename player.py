@@ -3,6 +3,7 @@ import pygame
 import math
 from settings import *
 from bullet import *
+from background import *
 
 
 class Player(pygame.sprite.Sprite):
@@ -44,6 +45,9 @@ class Player(pygame.sprite.Sprite):
 
         # health timer
         self.health_timer = pygame.time.get_ticks()
+
+        # create background
+        self.bg = Background(self.game, "img/backgrounds/space_background.png")
 
     # update the player
     def update(self):
@@ -185,9 +189,4 @@ class Player(pygame.sprite.Sprite):
 
                 # reset the health timer
                 self.health_timer = pygame.time.get_ticks()
-
-        # check if player is on a planet
-        planet_hits = pygame.sprite.spritecollide(self, self.game.planets, False)
-        if planet_hits:
-            pass
 
