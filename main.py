@@ -81,6 +81,9 @@ class Game:
         for enemy in self.enemies:
             enemy.draw_health_bar()
 
+        # draw arrow
+        self.player.draw_arrow()
+
         # update the screen
         pygame.display.update()
 

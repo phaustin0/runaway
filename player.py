@@ -49,6 +49,12 @@ class Player(pygame.sprite.Sprite):
         # create background
         self.bg = Background(self.game, "img/backgrounds/space_background.png")
 
+        # arrow
+        self.arrow = pygame.image.load('img/arrow.png')
+        self.og_arrow = self.arrow.copy()
+
+        self.arrow_rect = self.arrow.get_rect()
+
     # update the player
     def update(self):
         # apply movement
@@ -172,6 +178,27 @@ class Player(pygame.sprite.Sprite):
         heart_img = pygame.image.load('img/heart.png')
         heart_img_rect = heart_img.get_rect(center=(self.health_rect.left + 12, self.health_rect.centery))
         self.game.screen.blit(heart_img, heart_img_rect)
+
+    # draw arrow
+    def draw_arrow(self):
+        # get the nearest planet
+        distance = float('inf')
+        nearest_planet = None
+        for planet in self.game.planets:
+            current_distance = math.sqrt(abs(planet.rect.centerx - self.rect.centerx) ** 2 + abs(planet.rect.centery - self.rect.centery) ** 2)
+            if distance > current_distance:
+                nearest_planet = planet
+                distance = current_distance
+
+        # find the angle
+        self.arrow_rect.center = (350, 60)
+        arrow_pos = self.arrow_rect.center
+        dx, dy = nearest_planet.rect.centerx - self.rect.centerx, self.rect.centery - nearest_planet.rect.centery
+        angle = int(math.degrees(math.atan2(dy, dx)) - 90)
+
+        self.arrow = pygame.transform.rotate(self.og_arrow, angle)
+        self.arrow_rect = self.arrow.get_rect(center=arrow_pos)
+        self.game.screen.blit(self.arrow, self.arrow_rect)
 
     # check for collisions
     def check_collisions(self):
