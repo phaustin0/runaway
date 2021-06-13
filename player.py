@@ -190,3 +190,10 @@ class Player(pygame.sprite.Sprite):
                 # reset the health timer
                 self.health_timer = pygame.time.get_ticks()
 
+        # check if player is on a planet
+        planet_hits = pygame.sprite.spritecollide(self, self.game.planets, True)
+        if planet_hits:
+            planet_colour = planet_hits[0].colour
+            path = f"img/backgrounds/{planet_colour}_background.png"
+            self.bg.change_background(path)
+
