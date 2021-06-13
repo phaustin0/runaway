@@ -4,6 +4,7 @@ import sys
 from settings import *
 from player import *
 from enemy import *
+from planet import *
 
 
 # game class
@@ -38,9 +39,14 @@ class Game:
         self.enemies = pygame.sprite.LayeredUpdates()
         self.player_bullets = pygame.sprite.LayeredUpdates()
         self.enemy_bullets = pygame.sprite.LayeredUpdates()
+        self.planets = pygame.sprite.LayeredUpdates()
 
         self.player = Player(self)
-        Enemy(self, 100, 100, self.player)
+#         Enemy(self, 100, 100, self.player)
+        Planet(self, 500, 500)
+        Planet(self, 448, 566)
+        Planet(self, 537, 525)
+        Planet(self, 389, 33)
 
     # event handling
     def events(self):
