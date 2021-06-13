@@ -49,6 +49,9 @@ class Planet(pygame.sprite.Sprite):
         # rotate the planet
         self.rotate()
 
+        # check for collisions
+        self.check_collisions()
+
     # rotate the planet
     def rotate(self):
         self.angle += self.rotation_speed
@@ -59,4 +62,9 @@ class Planet(pygame.sprite.Sprite):
         planet_pos = self.rect.center
         self.image = pygame.transform.rotate(self.og_image, self.angle)
         self.rect = self.image.get_rect(center=planet_pos)
+
+    # check for collisions
+    def check_collisions(self):
+        bullet_hits = pygame.sprite.spritecollide(self, self.game.enemy_bullets, True)
+        bullet_hits = pygame.sprite.spritecollide(self, self.game.player_bullets, True)
 
