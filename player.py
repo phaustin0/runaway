@@ -62,6 +62,11 @@ class Player(pygame.sprite.Sprite):
 
         # planet timer
         self.planet_timer = pygame.time.get_ticks()
+        self.time_in_planet = 0
+
+        # planet
+        self.planet_image = pygame.image.load('img/planet.png')
+        self.planet_rect = self.planet_image.get_rect()
 
         # quid
         self.quid = Quid()
@@ -237,6 +242,14 @@ class Player(pygame.sprite.Sprite):
         self.game.screen.blit(text_surface, text_rect)
         self.game.screen.blit(self.quid_image, self.quid_rect)
 
+    # draw planet bar
+    def draw_planet_bar(self):
+        if self.is_in_planet:
+            pygame.draw.rect(self.game.screen, darkest_grey, (35, 135, 250, 25))
+            pygame.draw.rect(self.game.screen, darker_grey, (35, 135, (player_time_in_planet - (self.time_in_planet / 1000)) / player_time_in_planet * 250, 25))
+            self.planet_rect.center = (42, 150)
+            self.game.screen.blit(self.planet_image, self.planet_rect)
+
     # enter planet
     def enter_planet(self, planet):
         if self.can_enter_planet:
@@ -254,8 +267,8 @@ class Player(pygame.sprite.Sprite):
     # planet logic
     def planet_logic(self):
         if self.is_in_planet:
-            time_passed = pygame.time.get_ticks() - self.planet_timer
-            if time_passed > player_time_in_planet * 1000:  # remove player from planet
+            self.time_in_planet = pygame.time.get_ticks() - self.planet_timer
+            if self.time_in_planet > player_time_in_planet * 1000:  # remove player from planet
                 path = "img/backgrounds/space_background.png"
                 self.bg.change_background(path)
                 self.is_in_planet = False

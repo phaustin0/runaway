@@ -77,6 +77,7 @@ class Game:
         # draw all bars
         self.player.draw_shoot_bar()
         self.player.draw_health_bar()
+        self.player.draw_planet_bar()
 
         for enemy in self.enemies:
             enemy.draw_health_bar()
