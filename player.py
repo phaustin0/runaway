@@ -261,8 +261,9 @@ class Player(pygame.sprite.Sprite):
 
             # destroy all planets when entering one
             planet.kill()
-            for p in self.game.planets:
-                p.kill()
+            for sprite in self.game.all_sprites:
+                if sprite in self.game.enemies or sprite in self.game.planets:
+                    sprite.kill()
 
     # planet logic
     def planet_logic(self):
@@ -272,6 +273,8 @@ class Player(pygame.sprite.Sprite):
                 path = "img/backgrounds/space_background.png"
                 self.bg.change_background(path)
                 self.is_in_planet = False
+                for sprite in self.game.enemies:
+                    sprite.kill()
 
     # check for collisions
     def check_collisions(self):
