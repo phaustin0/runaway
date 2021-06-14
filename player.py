@@ -55,6 +55,9 @@ class Player(pygame.sprite.Sprite):
 
         self.arrow_rect = self.arrow.get_rect()
 
+        # entering planet
+        self.can_enter_planet = False
+
     # update the player
     def update(self):
         # apply movement
@@ -78,6 +81,9 @@ class Player(pygame.sprite.Sprite):
         if self.target_health <= 0:
             self.kill()
             self.game.playing = False
+
+        # reset entering planet
+        self.can_enter_planet = False
 
     # player movement
     def movement(self):
@@ -112,6 +118,8 @@ class Player(pygame.sprite.Sprite):
                 for sprite in self.game.all_sprites:
                     sprite.rect.x -= player_speed
             self.xv += player_speed
+        if keys[pygame.K_e]:
+            self.can_enter_planet = True
 
         # mouse
         mouse_press = pygame.mouse.get_pressed()[0]
@@ -191,14 +199,29 @@ class Player(pygame.sprite.Sprite):
                 distance = current_distance
 
         # find the angle
-        self.arrow_rect.center = (350, 60)
-        arrow_pos = self.arrow_rect.center
-        dx, dy = nearest_planet.rect.centerx - self.rect.centerx, self.rect.centery - nearest_planet.rect.centery
-        angle = int(math.degrees(math.atan2(dy, dx)) - 90)
+        try:
+            self.arrow_rect.center = (350, 60)
+            arrow_pos = self.arrow_rect.center
+            dx, dy = nearest_planet.rect.centerx - self.rect.centerx, self.rect.centery - nearest_planet.rect.centery
+            angle = int(math.degrees(math.atan2(dy, dx)) - 90)
 
-        self.arrow = pygame.transform.rotate(self.og_arrow, angle)
-        self.arrow_rect = self.arrow.get_rect(center=arrow_pos)
-        self.game.screen.blit(self.arrow, self.arrow_rect)
+            self.arrow = pygame.transform.rotate(self.og_arrow, angle)
+            self.arrow_rect = self.arrow.get_rect(center=arrow_pos)
+            self.game.screen.blit(self.arrow, self.arrow_rect)
+        except Exception:
+            return
+
+    # enter planet
+    def enter_planet(self, planet):
+        if self.can_enter_planet:
+            planet_colour = planet.colour
+            path = f"img/backgrounds/{planet_colour}_background.png"
+            self.bg.change_background(path)
+
+            # destroy all planets when entering one
+            planet.kill()
+            for p in self.game.planets:
+                p.kill()
 
     # check for collisions
     def check_collisions(self):
@@ -218,9 +241,7 @@ class Player(pygame.sprite.Sprite):
                 self.health_timer = pygame.time.get_ticks()
 
         # check if player is on a planet
-        planet_hits = pygame.sprite.spritecollide(self, self.game.planets, True)
+        planet_hits = pygame.sprite.spritecollide(self, self.game.planets, False)
         if planet_hits:
-            planet_colour = planet_hits[0].colour
-            path = f"img/backgrounds/{planet_colour}_background.png"
-            self.bg.change_background(path)
+            self.enter_planet(planet_hits[0])
 
