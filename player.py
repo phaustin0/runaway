@@ -4,6 +4,7 @@ import math
 from settings import *
 from bullet import *
 from background import *
+from quid import *
 
 
 class Player(pygame.sprite.Sprite):
@@ -61,6 +62,14 @@ class Player(pygame.sprite.Sprite):
 
         # planet timer
         self.planet_timer = pygame.time.get_ticks()
+
+        # quid
+        self.quid = Quid()
+        self.quid_image = pygame.image.load('img/quid.png')
+        self.quid_rect = self.quid_image.get_rect()
+
+        # font
+        self.font = pygame.font.SysFont('Comic Sans MS', 50, True)
 
     # update the player
     def update(self):
@@ -217,6 +226,16 @@ class Player(pygame.sprite.Sprite):
             self.game.screen.blit(self.arrow, self.arrow_rect)
         except Exception:
             return
+
+    # draw the amount of quid
+    def draw_quid(self):
+        num_of_quid = str(self.quid.get_quid())
+        text_surface = self.font.render(num_of_quid, True, (241, 178, 22))
+        text_rect = text_surface.get_rect()
+        text_rect.topright = (width - 25, 12)
+        self.quid_rect.topright = (text_rect.left - 15, 25)
+        self.game.screen.blit(text_surface, text_rect)
+        self.game.screen.blit(self.quid_image, self.quid_rect)
 
     # enter planet
     def enter_planet(self, planet):

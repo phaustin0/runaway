@@ -84,6 +84,9 @@ class Game:
         # draw arrow
         self.player.draw_arrow()
 
+        # draw quid
+        self.player.draw_quid()
+
         # update the screen
         pygame.display.update()
 
