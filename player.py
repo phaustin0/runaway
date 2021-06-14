@@ -57,6 +57,10 @@ class Player(pygame.sprite.Sprite):
 
         # entering planet
         self.can_enter_planet = False
+        self.is_in_planet = False
+
+        # planet timer
+        self.planet_timer = pygame.time.get_ticks()
 
     # update the player
     def update(self):
@@ -84,6 +88,9 @@ class Player(pygame.sprite.Sprite):
 
         # reset entering planet
         self.can_enter_planet = False
+
+        # planet logic if player is in planet
+        self.planet_logic()
 
     # player movement
     def movement(self):
@@ -214,14 +221,25 @@ class Player(pygame.sprite.Sprite):
     # enter planet
     def enter_planet(self, planet):
         if self.can_enter_planet:
+            self.is_in_planet = True
             planet_colour = planet.colour
             path = f"img/backgrounds/{planet_colour}_background.png"
             self.bg.change_background(path)
+            self.planet_timer = pygame.time.get_ticks()
 
             # destroy all planets when entering one
             planet.kill()
             for p in self.game.planets:
                 p.kill()
+
+    # planet logic
+    def planet_logic(self):
+        if self.is_in_planet:
+            time_passed = pygame.time.get_ticks() - self.planet_timer
+            if time_passed > player_time_in_planet * 1000:  # remove player from planet
+                path = "img/backgrounds/space_background.png"
+                self.bg.change_background(path)
+                self.is_in_planet = False
 
     # check for collisions
     def check_collisions(self):

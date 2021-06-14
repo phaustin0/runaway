@@ -31,6 +31,7 @@ player_bullet_speed = 40
 player_bullet_damage = 100
 player_bullet_colour = yellow
 player_bullet_shoot_interval = 50
+player_time_in_planet = 10
 
 # bullet settings
 bullet_layer = 3
