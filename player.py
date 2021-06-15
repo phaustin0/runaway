@@ -68,6 +68,11 @@ class Player(pygame.sprite.Sprite):
         self.target_health = self.max_health
         self.current_health = self.max_health
 
+        # healing
+        self.heal_amount = player_heal_amount
+        self.kill_heal_amount = player_kill_heal_amount
+        self.heal_time = player_heal_time
+
         # health bars
         self.health_rect = pygame.Rect(35, 25, self.current_health / player_max_health * 250, 25)
         self.transition_rect = pygame.Rect(self.health_rect.right, 25, 0, 25)
@@ -159,6 +164,11 @@ class Player(pygame.sprite.Sprite):
                     can_buy = powerup.buy_powerup()
                     if can_buy:
                         self.max_time_in_planet += 1.5
+                # increase heal amount
+                if event.key == pygame.K_x:
+                    can_buy = powerup.buy_powerup()
+                    if can_buy:
+                        self.heal_amount += 15
 
     # update the player
     def update(self):
@@ -177,7 +187,7 @@ class Player(pygame.sprite.Sprite):
         self.check_collisions()
         
         # heal player
-        self.heal(player_heal_amount)
+        self.heal(self.heal_amount)
 
         # destroy if health is less than 0
         if self.target_health <= 0:
@@ -255,14 +265,14 @@ class Player(pygame.sprite.Sprite):
     # heal the player
     def heal(self, amount):
         time_passed = pygame.time.get_ticks() - self.health_timer
-        if time_passed > player_heal_time * 1000:
+        if time_passed > self.heal_time * 1000:
             self.target_health += amount
             self.health_timer = pygame.time.get_ticks()
         self.target_health = min(self.target_health, self.max_health)
 
     # heal the player by a small amount after a kill
     def heal_after_kill(self):
-        self.target_health += player_kill_heal_amount
+        self.target_health += self.kill_heal_amount
         self.target_health = min(self.target_health, self.max_health)
 
     # rewarding system
