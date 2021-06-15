@@ -34,6 +34,7 @@ player_bullet_damage = 100
 player_bullet_colour = yellow
 player_bullet_shoot_interval = 50
 player_time_in_planet = 10
+player_kill_heal_amount = 10 / 100 * player_max_health
 
 # bullet settings
 bullet_layer = 3

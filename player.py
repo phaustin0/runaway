@@ -188,6 +188,11 @@ class Player(pygame.sprite.Sprite):
             self.health_timer = pygame.time.get_ticks()
         self.target_health = min(self.target_health, player_max_health)
 
+    # heal the player by a small amount after a kill
+    def heal_after_kill(self, amount):
+        self.target_health += amount
+        self.target_health = min(self.target_health, player_max_health)
+
     # rewarding system
     def reward(self):
         amount = self.kills * quid_multiplier

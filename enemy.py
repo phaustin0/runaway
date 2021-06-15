@@ -70,6 +70,7 @@ class Enemy(pygame.sprite.Sprite):
             if self.player.is_in_planet:
                 self.player.kills += 1
             self.kill()
+            self.player.heal_after_kill(player_kill_heal_amount)  # heal player after kill
 
     # movement of the enemy
     def movement(self):
