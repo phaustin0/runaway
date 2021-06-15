@@ -12,7 +12,7 @@ player_layer = 4
 player_speed = 9
 player_max_health = 200
 player_heal_time = 2
-player_heal_amount = player_max_health // 3.2
+player_heal_amount = player_max_health // 3
 player_bullet_speed = 40
 player_bullet_damage = 100
 player_bullet_colour = yellow
@@ -57,6 +57,7 @@ class Player(pygame.sprite.Sprite):
         self.direction = pygame.Vector2(1, 0)
 
         # shootings bullets
+        self.bullet_damage = player_bullet_damage
         self.bullet_timer = player_bullet_shoot_interval
         self.player_bullet_shoot_interval = player_bullet_shoot_interval
         self.can_shoot = True
@@ -137,6 +138,12 @@ class Player(pygame.sprite.Sprite):
                     if can_buy:
                         self.player_bullet_shoot_interval -= 5
                         self.enemy_bullet_shoot_interval -= 15
+                # increase damage
+                if event.key == pygame.K_f:
+                    can_buy = powerup.buy_powerup()
+                    if can_buy:
+                        self.bullet_damage += 20
+                        self.enemy_bullet_damage += 25
 
     # update the player
     def update(self):
@@ -212,7 +219,7 @@ class Player(pygame.sprite.Sprite):
         mouse_press = pygame.mouse.get_pressed()[0]
         if mouse_press:
             if self.can_shoot:
-                Bullet(self.game, self, player_bullet_colour, player_bullet_speed, player_bullet_damage, self.direction)
+                Bullet(self.game, self, player_bullet_colour, player_bullet_speed, self.bullet_damage, self.direction)
                 self.can_shoot = False
 
     # rotate player
