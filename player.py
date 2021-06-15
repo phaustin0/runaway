@@ -103,10 +103,12 @@ class Player(pygame.sprite.Sprite):
         self.planet_image = pygame.image.load('img/planet.png')
         self.planet_rect = self.planet_image.get_rect()
 
-        # quidhow to modify values from a settnigs.py file pygame
+        # quid
         self.quid = Quid()
         self.quid_image = pygame.image.load('img/quid.png')
         self.quid_rect = self.quid_image.get_rect()
+
+        self.quid_multiplier = quid_multiplier
 
         # font
         self.font = pygame.font.SysFont('Comic Sans MS', 50, True)
@@ -180,6 +182,11 @@ class Player(pygame.sprite.Sprite):
                     can_buy = powerup.buy_powerup()
                     if can_buy:
                         self.heal_time -= 0.2
+                # increase quid multiplier
+                if event.key == pygame.K_g:
+                    can_buy = powerup.buy_powerup()
+                    if can_buy:
+                        self.quid_multiplier += 1
 
     # update the player
     def update(self):
@@ -288,7 +295,7 @@ class Player(pygame.sprite.Sprite):
 
     # rewarding system
     def reward(self):
-        amount = self.kills * quid_multiplier
+        amount = self.kills * self.quid_multiplier
         self.quid.add_quid(amount)
         self.kills = 0
 
