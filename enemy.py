@@ -4,9 +4,17 @@ import math
 from settings import *
 from bullet import *
 
+# enemy settings
+enemy_layer = 5
+enemy_max_health = 300
+enemy_bullet_speed = 25
+enemy_bullet_damage = 100
+enemy_bullet_colour = red
+enemy_bullet_shoot_interval = 100
+
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, game, x, y, player):
+    def __init__(self, game, x, y, player, speed):
         self.game = game
         self._layer = enemy_layer
         self.shooter_type = 'enemy'
@@ -33,7 +41,7 @@ class Enemy(pygame.sprite.Sprite):
         self.position = self.rect.center
 
         # enemy's velocity
-        self.yv = -enemy_speed
+        self.yv = -speed
 
         # shooting bullets
         self.bullet_timer = enemy_bullet_shoot_interval
@@ -70,7 +78,7 @@ class Enemy(pygame.sprite.Sprite):
             if self.player.is_in_planet:
                 self.player.kills += 1
             self.kill()
-            self.player.heal_after_kill(player_kill_heal_amount)  # heal player after kill
+            self.player.heal_after_kill()  # heal player after kill
 
     # movement of the enemy
     def movement(self):

@@ -1,11 +1,31 @@
 # player class file
 import pygame
 import math
-from settings import *
+from powerups import *
 from bullet import *
 from background import *
 from quid import *
 from enemy_spawner import *
+
+# player settings
+player_layer = 4
+player_speed = 9
+player_max_health = 200
+player_heal_time = 2
+player_heal_amount = player_max_health // 3.2
+player_bullet_speed = 40
+player_bullet_damage = 100
+player_bullet_colour = yellow
+player_bullet_shoot_interval = 50
+player_time_in_planet = 10
+player_kill_heal_amount = 10 / 100 * player_max_health
+
+# enemy spawner settings
+enemy_spawn_interval = 4
+enemy_speed = 5
+
+# quid settings
+quid_multiplier = 10
 
 
 class Player(pygame.sprite.Sprite):
@@ -29,6 +49,7 @@ class Player(pygame.sprite.Sprite):
         # set the player's initial vertical and horizontal velocity to 0
         self.xv = 0
         self.yv = 0
+        self.player_speed = player_speed
 
         # direction of player
         self.direction = pygame.Vector2(1, 0)
@@ -69,7 +90,7 @@ class Player(pygame.sprite.Sprite):
         self.planet_image = pygame.image.load('img/planet.png')
         self.planet_rect = self.planet_image.get_rect()
 
-        # quid
+        # quidhow to modify values from a settnigs.py file pygame
         self.quid = Quid()
         self.quid_image = pygame.image.load('img/quid.png')
         self.quid_rect = self.quid_image.get_rect()
@@ -85,9 +106,25 @@ class Player(pygame.sprite.Sprite):
         # enemy spawner
         self.enemy_spawner = EnemySpawner(self.game, self)
         self.enemy_spawn_timer = pygame.time.get_ticks()
+        self.enemy_speed = enemy_speed
 
         # spawn an enemy first
         self.enemy_spawner.spawn_enemy()
+
+    # events
+    def events(self):
+        for event in pygame.event.get():  # check through each event
+            if event.type == pygame.QUIT:  # if user pressed 'X' button
+                # exit the loop
+                self.game.playing = False
+                self.game.running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_q:
+                    powerup = Powerup(self)
+                    can_buy = powerup.buy_powerup()
+                    if can_buy:
+                        self.player_speed += 2
+                        self.enemy_speed += 2
 
     # update the player
     def update(self):
@@ -138,23 +175,24 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_w]:  # up
             if self.rect.top < 50:
                 for sprite in self.game.all_sprites:
-                    sprite.rect.y += player_speed
-            self.yv -= player_speed
+                    sprite.rect.y += self.player_speed
+            self.yv -= self.player_speed
         elif keys[pygame.K_s]:  # down
             if self.rect.bottom > height - 50:
                 for sprite in self.game.all_sprites:
-                    sprite.rect.y -= player_speed
-            self.yv += player_speed
+                    sprite.rect.y -= self.player_speed
+            self.yv += self.player_speed
         if keys[pygame.K_a]:  # left
             if self.rect.left < 50:
                 for sprite in self.game.all_sprites:
-                    sprite.rect.x += player_speed
-            self.xv -= player_speed
+                    sprite.rect.x += self.player_speed
+            self.xv -= self.player_speed
         elif keys[pygame.K_d]:  # right
             if self.rect.right > width - 50:
                 for sprite in self.game.all_sprites:
-                    sprite.rect.x -= player_speed
-            self.xv += player_speed
+                    sprite.rect.x -= self.player_speed
+            self.xv += self.player_speed
+        # enter planet
         if keys[pygame.K_e]:
             self.can_enter_planet = True
 
@@ -189,8 +227,8 @@ class Player(pygame.sprite.Sprite):
         self.target_health = min(self.target_health, player_max_health)
 
     # heal the player by a small amount after a kill
-    def heal_after_kill(self, amount):
-        self.target_health += amount
+    def heal_after_kill(self):
+        self.target_health += player_kill_heal_amount
         self.target_health = min(self.target_health, player_max_health)
 
     # rewarding system

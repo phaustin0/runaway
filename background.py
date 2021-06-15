@@ -2,6 +2,9 @@
 import pygame
 from settings import *
 
+# background settings
+bg_layer = 1
+
 
 class Background(pygame.sprite.Sprite):
     def __init__(self, game, path):

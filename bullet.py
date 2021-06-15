@@ -2,6 +2,10 @@
 import pygame
 from settings import *
 
+# bullet settings
+bullet_layer = 3
+bullet_time_to_kill = 1000
+
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, game, shooter, colour, speed, damage, direction):

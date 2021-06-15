@@ -3,6 +3,12 @@ import pygame
 from random import *
 from settings import *
 
+# planet settings
+planet_width = 100
+planet_height = 100
+planet_radius = planet_width // 2
+planet_layer = 2
+
 
 # base planet class
 class Planet(pygame.sprite.Sprite):

@@ -5,6 +5,7 @@ from settings import *
 from player import *
 from enemy import *
 from planet import *
+from powerups import *
 
 
 # game class
@@ -25,6 +26,9 @@ class Game:
 
         # playing variable for whether the game is being played
         self.playing = False
+
+        # powerup
+        self.powerup = None
 
     # create a new game
     def new(self):
@@ -91,7 +95,7 @@ class Game:
     # main game loop
     def main(self):
         while self.playing:
-            self.events()
+            self.player.events()
             self.update()
             self.draw()
         self.running = False
