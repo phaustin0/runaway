@@ -8,13 +8,11 @@ from bullet import *
 enemy_layer = 5
 enemy_max_health = 300
 enemy_bullet_speed = 25
-enemy_bullet_damage = 100
 enemy_bullet_colour = red
-enemy_bullet_shoot_interval = 100
 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, game, x, y, player, speed):
+    def __init__(self, game, x, y, player, speed, bullet_shoot_interval, bullet_damage):
         self.game = game
         self._layer = enemy_layer
         self.shooter_type = 'enemy'
@@ -44,7 +42,9 @@ class Enemy(pygame.sprite.Sprite):
         self.yv = -speed
 
         # shooting bullets
-        self.bullet_timer = enemy_bullet_shoot_interval
+        self.bullet_shoot_interval = bullet_shoot_interval
+        self.bullet_timer = self.bullet_shoot_interval
+        self.bullet_damage = bullet_damage
         self.can_shoot = True
 
         # enemy health
@@ -59,14 +59,14 @@ class Enemy(pygame.sprite.Sprite):
         # lower the bullet timer
         self.bullet_timer -= 1 if not self.can_shoot else 0
         if self.bullet_timer < 0:
-            self.bullet_timer = enemy_bullet_shoot_interval
+            self.bullet_timer = self.bullet_shoot_interval
             self.can_shoot = True
 
         # shoot
         if self.can_shoot:
             # check if the enemy is on the screen before shooting
             if self.rect.centerx > 0 and self.rect.centerx < width and self.rect.centery > 0 and self.rect.centery < height:
-                Bullet(self.game, self, enemy_bullet_colour, enemy_bullet_speed, enemy_bullet_damage, -self.direction)
+                Bullet(self.game, self, enemy_bullet_colour, enemy_bullet_speed, self.bullet_damage, -self.direction)
                 self.can_shoot = False
 
         # check for collisions

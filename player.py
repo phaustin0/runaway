@@ -23,6 +23,8 @@ player_kill_heal_amount = 10 / 100 * player_max_health
 # enemy spawner settings
 enemy_spawn_interval = 4
 enemy_speed = 5
+enemy_bullet_damage = 100
+enemy_bullet_shoot_interval = 100
 
 # quid settings
 quid_multiplier = 10
@@ -56,6 +58,7 @@ class Player(pygame.sprite.Sprite):
 
         # shootings bullets
         self.bullet_timer = player_bullet_shoot_interval
+        self.player_bullet_shoot_interval = player_bullet_shoot_interval
         self.can_shoot = True
 
         # set players health
@@ -107,6 +110,8 @@ class Player(pygame.sprite.Sprite):
         self.enemy_spawner = EnemySpawner(self.game, self)
         self.enemy_spawn_timer = pygame.time.get_ticks()
         self.enemy_speed = enemy_speed
+        self.enemy_bullet_shoot_interval = enemy_bullet_shoot_interval
+        self.enemy_bullet_damage = enemy_bullet_damage
 
         # spawn an enemy first
         self.enemy_spawner.spawn_enemy()
@@ -119,12 +124,19 @@ class Player(pygame.sprite.Sprite):
                 self.game.playing = False
                 self.game.running = False
             if event.type == pygame.KEYDOWN:
+                powerup = Powerup(self)
+                # increase speed
                 if event.key == pygame.K_q:
-                    powerup = Powerup(self)
                     can_buy = powerup.buy_powerup()
                     if can_buy:
                         self.player_speed += 2
                         self.enemy_speed += 2
+                # increase fire rate
+                if event.key == pygame.K_r:
+                    can_buy = powerup.buy_powerup()
+                    if can_buy:
+                        self.player_bullet_shoot_interval -= 5
+                        self.enemy_bullet_shoot_interval -= 15
 
     # update the player
     def update(self):
@@ -168,7 +180,7 @@ class Player(pygame.sprite.Sprite):
         self.bullet_timer -= 1 if not self.can_shoot else 0
         if self.bullet_timer < 0:
             self.can_shoot = True
-            self.bullet_timer = player_bullet_shoot_interval
+            self.bullet_timer = self.player_bullet_shoot_interval
 
         # keys
         keys = pygame.key.get_pressed()
@@ -240,7 +252,7 @@ class Player(pygame.sprite.Sprite):
     # draw the shoot bar
     def draw_shoot_bar(self):
         pygame.draw.rect(self.game.screen, dark_grey, (35, 80, 250, 25))
-        pygame.draw.rect(self.game.screen, light_grey, (35, 80, self.bullet_timer / player_bullet_shoot_interval * 250, 25))
+        pygame.draw.rect(self.game.screen, light_grey, (35, 80, self.bullet_timer / self.player_bullet_shoot_interval * 250, 25))
         gun_img = pygame.image.load('img/gun.png')
         gun_img_rect = gun_img.get_rect(center=(35 + 5, 80 + 14))
         self.game.screen.blit(gun_img, gun_img_rect)
