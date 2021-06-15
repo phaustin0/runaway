@@ -57,3 +57,6 @@ planet_height = 100
 planet_radius = planet_width // 2
 planet_layer = 2
 
+# quid settings
+quid_multiplier = 10
+

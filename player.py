@@ -188,6 +188,12 @@ class Player(pygame.sprite.Sprite):
             self.health_timer = pygame.time.get_ticks()
         self.target_health = min(self.target_health, player_max_health)
 
+    # rewarding system
+    def reward(self):
+        amount = self.kills * quid_multiplier
+        self.quid.add_quid(amount)
+        self.kills = 0
+
     # draw the shoot bar
     def draw_shoot_bar(self):
         pygame.draw.rect(self.game.screen, dark_grey, (35, 80, 250, 25))
@@ -260,7 +266,7 @@ class Player(pygame.sprite.Sprite):
 
     # draw the amount of kills in the planet
     def draw_kills(self):
-        if self.is_in_planet or not self.is_in_planet:  # if in planet, then draw the thing
+        if self.is_in_planet:  # if in planet, then draw the thing
             text_surface = self.font.render(str(self.kills), True, (96, 0, 0))
             text_rect = text_surface.get_rect()
             text_rect.topright = (self.quid_rect.left - 40, 12)
@@ -300,6 +306,7 @@ class Player(pygame.sprite.Sprite):
                 path = "img/backgrounds/space_background.png"
                 self.bg.change_background(path)
                 self.is_in_planet = False
+                self.reward()
                 for sprite in self.game.enemies:
                     sprite.kill()
 
