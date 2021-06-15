@@ -175,6 +175,11 @@ class Player(pygame.sprite.Sprite):
                     can_buy = powerup.buy_powerup()
                     if can_buy:
                         self.kill_heal_amount += 10
+                # decrease heal time
+                if event.key == pygame.K_v:
+                    can_buy = powerup.buy_powerup()
+                    if can_buy:
+                        self.heal_time -= 0.2
 
     # update the player
     def update(self):
