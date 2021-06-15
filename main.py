@@ -82,6 +82,9 @@ class Game:
         # draw quid
         self.player.draw_quid()
 
+        # draw kills
+        self.player.draw_kills()
+
         # update the screen
         pygame.display.update()
 

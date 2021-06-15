@@ -77,6 +77,11 @@ class Player(pygame.sprite.Sprite):
         # font
         self.font = pygame.font.SysFont('Comic Sans MS', 50, True)
 
+        # kills
+        self.kill_image = pygame.image.load('img/enemy_kill.png')
+        self.kill_rect = self.kill_image.get_rect()
+        self.kills = 0  # number of kills
+
         # enemy spawner
         self.enemy_spawner = EnemySpawner(self.game, self)
         self.enemy_spawn_timer = pygame.time.get_ticks()
@@ -252,6 +257,16 @@ class Player(pygame.sprite.Sprite):
         self.quid_rect.topright = (text_rect.left - 15, 25)
         self.game.screen.blit(text_surface, text_rect)
         self.game.screen.blit(self.quid_image, self.quid_rect)
+
+    # draw the amount of kills in the planet
+    def draw_kills(self):
+        if self.is_in_planet or not self.is_in_planet:  # if in planet, then draw the thing
+            text_surface = self.font.render(str(self.kills), True, (96, 0, 0))
+            text_rect = text_surface.get_rect()
+            text_rect.topright = (self.quid_rect.left - 40, 12)
+            self.kill_rect.topright = (text_rect.left - 15, 25)
+            self.game.screen.blit(text_surface, text_rect)
+            self.game.screen.blit(self.kill_image, self.kill_rect)
 
     # draw planet bar
     def draw_planet_bar(self):

@@ -66,6 +66,9 @@ class Enemy(pygame.sprite.Sprite):
 
         # destroy when health is less than zero
         if self.target_health <= 0:
+            # increase the number of kills of the player when in planet
+            if self.player.is_in_planet:
+                self.player.kills += 1
             self.kill()
 
     # movement of the enemy
