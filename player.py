@@ -87,6 +87,7 @@ class Player(pygame.sprite.Sprite):
         self.arrow = pygame.image.load('img/arrow.png')
         self.og_arrow = self.arrow.copy()
 
+
         self.arrow_rect = self.arrow.get_rect()
 
         # entering planet
@@ -169,6 +170,11 @@ class Player(pygame.sprite.Sprite):
                     can_buy = powerup.buy_powerup()
                     if can_buy:
                         self.heal_amount += 15
+                # increase kill heal amount
+                if event.key == pygame.K_c:
+                    can_buy = powerup.buy_powerup()
+                    if can_buy:
+                        self.kill_heal_amount += 10
 
     # update the player
     def update(self):
