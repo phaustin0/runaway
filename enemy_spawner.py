@@ -36,5 +36,5 @@ class EnemySpawner:
         x, y = self.get_random_position()
 
         # spawn the enemy
-        Enemy(self.game, x, y, self.player, self.player.enemy_speed, self.player.enemy_bullet_shoot_interval, self.player.enemy_bullet_damage)
+        Enemy(self.game, x, y, self.player, self.player.enemy_speed, self.player.enemy_bullet_shoot_interval, self.player.enemy_bullet_damage, self.player.enemy_max_health)
 

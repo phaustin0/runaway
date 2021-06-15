@@ -25,6 +25,7 @@ enemy_spawn_interval = 4
 enemy_speed = 5
 enemy_bullet_damage = 100
 enemy_bullet_shoot_interval = 100
+enemy_max_health = 300
 
 # quid settings
 quid_multiplier = 10
@@ -63,8 +64,9 @@ class Player(pygame.sprite.Sprite):
         self.can_shoot = True
 
         # set players health
-        self.target_health = player_max_health
-        self.current_health = player_max_health
+        self.max_health = player_max_health
+        self.target_health = self.max_health
+        self.current_health = self.max_health
 
         # health bars
         self.health_rect = pygame.Rect(35, 25, self.current_health / player_max_health * 250, 25)
@@ -113,6 +115,7 @@ class Player(pygame.sprite.Sprite):
         self.enemy_speed = enemy_speed
         self.enemy_bullet_shoot_interval = enemy_bullet_shoot_interval
         self.enemy_bullet_damage = enemy_bullet_damage
+        self.enemy_max_health = enemy_max_health
 
         # spawn an enemy first
         self.enemy_spawner.spawn_enemy()
@@ -144,6 +147,12 @@ class Player(pygame.sprite.Sprite):
                     if can_buy:
                         self.bullet_damage += 20
                         self.enemy_bullet_damage += 25
+                # increase max health
+                if event.key == pygame.K_z:
+                    can_buy = powerup.buy_powerup()
+                    if can_buy:
+                        self.max_health += 30
+                        self.enemy_max_health += 30
 
     # update the player
     def update(self):
@@ -243,12 +252,12 @@ class Player(pygame.sprite.Sprite):
         if time_passed > player_heal_time * 1000:
             self.target_health += amount
             self.health_timer = pygame.time.get_ticks()
-        self.target_health = min(self.target_health, player_max_health)
+        self.target_health = min(self.target_health, self.max_health)
 
     # heal the player by a small amount after a kill
     def heal_after_kill(self):
         self.target_health += player_kill_heal_amount
-        self.target_health = min(self.target_health, player_max_health)
+        self.target_health = min(self.target_health, self.max_health)
 
     # rewarding system
     def reward(self):
@@ -272,17 +281,17 @@ class Player(pygame.sprite.Sprite):
 
         if self.current_health < self.target_health:
             self.current_health += health_animation_speed
-            transition_width = int((self.target_health - self.current_health) / player_max_health * 250)
+            transition_width = int((self.target_health - self.current_health) / self.max_health * 250)
             transition_colour = green
 
-            self.health_rect = pygame.Rect(35, 25, self.current_health / player_max_health * 250, 25)
+            self.health_rect = pygame.Rect(35, 25, self.current_health / self.max_health * 250, 25)
             self.transition_rect = pygame.Rect(self.health_rect.right, 25, transition_width, 25)
         if self.current_health > self.target_health:
             self.current_health -= health_animation_speed
-            transition_width = -int((self.target_health - self.current_health) / player_max_health * 250)
+            transition_width = -int((self.target_health - self.current_health) / self.max_health * 250)
             transition_colour = yellow
 
-            self.health_rect = pygame.Rect(35, 25, self.target_health / player_max_health * 250, 25)
+            self.health_rect = pygame.Rect(35, 25, self.target_health / self.max_health * 250, 25)
             self.transition_rect = pygame.Rect(self.health_rect.right, 25, transition_width, 25)
 
         pygame.draw.rect(self.game.screen, dark_grey, (35, 25, 250, 25))

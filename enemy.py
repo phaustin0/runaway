@@ -6,13 +6,12 @@ from bullet import *
 
 # enemy settings
 enemy_layer = 5
-enemy_max_health = 300
 enemy_bullet_speed = 25
 enemy_bullet_colour = red
 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, game, x, y, player, speed, bullet_shoot_interval, bullet_damage):
+    def __init__(self, game, x, y, player, speed, bullet_shoot_interval, bullet_damage, max_health):
         self.game = game
         self._layer = enemy_layer
         self.shooter_type = 'enemy'
@@ -48,8 +47,9 @@ class Enemy(pygame.sprite.Sprite):
         self.can_shoot = True
 
         # enemy health
-        self.target_health = enemy_max_health
-        self.current_health = enemy_max_health
+        self.max_health = max_health
+        self.target_health = self.max_health
+        self.current_health = self.max_health
 
     # update the enemy
     def update(self):
@@ -124,17 +124,17 @@ class Enemy(pygame.sprite.Sprite):
 
         if self.current_health < self.target_health:
             self.current_health += health_animation_speed
-            transition_width = int((self.target_health - self.current_health) / enemy_max_health * 150)
+            transition_width = int((self.target_health - self.current_health) / self.max_health * 150)
             transition_colour = green
         if self.current_health > self.target_health:
             self.current_health -= health_animation_speed
-            transition_width = int((self.current_health - self.target_health) / enemy_max_health * 100)
+            transition_width = int((self.current_health - self.target_health) / self.max_health * 100)
             transition_colour = yellow
 
-        health_rect = pygame.Rect(self.rect.centerx - 75, self.rect.bottom + 10, self.target_health / (enemy_max_health / 150), 25)
+        health_rect = pygame.Rect(self.rect.centerx - 75, self.rect.bottom + 10, self.target_health / (self.max_health / 150), 25)
         transition_rect = pygame.Rect(health_rect.right, self.rect.bottom + 10, transition_width, 25)
 
-        if self.target_health != enemy_max_health:
+        if self.target_health != self.max_health:
             pygame.draw.rect(self.game.screen, dark_grey, (self.rect.centerx - 75, self.rect.bottom + 10, 150, 25))
             pygame.draw.rect(self.game.screen, red, health_rect)
             pygame.draw.rect(self.game.screen, transition_colour, transition_rect)
