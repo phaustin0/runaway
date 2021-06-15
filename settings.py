@@ -48,6 +48,9 @@ enemy_bullet_damage = 100
 enemy_bullet_colour = red
 enemy_bullet_shoot_interval = 100
 
+# enemy spawner settings
+enemy_spawn_interval = 4
+
 # planet settings
 planet_width = 100
 planet_height = 100

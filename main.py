@@ -26,8 +26,6 @@ class Game:
         # playing variable for whether the game is being played
         self.playing = False
 
-        # player
-
     # create a new game
     def new(self):
         # start playing
@@ -42,7 +40,6 @@ class Game:
         self.planets = pygame.sprite.LayeredUpdates()
 
         self.player = Player(self)
-#         Enemy(self, 100, 100, self.player)
         Planet(self, 500, 500)
         Planet(self, 448, 566)
         Planet(self, 537, 525)
@@ -55,9 +52,6 @@ class Game:
                 # exit the loop
                 self.playing = False
                 self.running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    Enemy(self, 600, 600, self.player)
 
     # update game
     def update(self):

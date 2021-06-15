@@ -5,6 +5,7 @@ from settings import *
 from bullet import *
 from background import *
 from quid import *
+from enemy_spawner import *
 
 
 class Player(pygame.sprite.Sprite):
@@ -76,6 +77,13 @@ class Player(pygame.sprite.Sprite):
         # font
         self.font = pygame.font.SysFont('Comic Sans MS', 50, True)
 
+        # enemy spawner
+        self.enemy_spawner = EnemySpawner(self.game, self)
+        self.enemy_spawn_timer = pygame.time.get_ticks()
+
+        # spawn an enemy first
+        self.enemy_spawner.spawn_enemy()
+
     # update the player
     def update(self):
         # apply movement
@@ -105,6 +113,9 @@ class Player(pygame.sprite.Sprite):
 
         # planet logic if player is in planet
         self.planet_logic()
+
+        # spawn enemies
+        self.spawn_enemy()
 
     # player movement
     def movement(self):
@@ -275,6 +286,13 @@ class Player(pygame.sprite.Sprite):
                 self.is_in_planet = False
                 for sprite in self.game.enemies:
                     sprite.kill()
+
+    # spawn enemy
+    def spawn_enemy(self):
+        time_passed = pygame.time.get_ticks() - self.enemy_spawn_timer
+        if time_passed >= enemy_spawn_interval * 1000:
+            self.enemy_spawner.spawn_enemy()
+            self.enemy_spawn_timer = pygame.time.get_ticks()
 
     # check for collisions
     def check_collisions(self):
