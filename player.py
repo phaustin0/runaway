@@ -269,6 +269,7 @@ class Player(pygame.sprite.Sprite):
             path = f"img/backgrounds/{planet_colour}_background.png"
             self.bg.change_background(path)
             self.planet_timer = pygame.time.get_ticks()
+            self.enemy_spawn_timer = pygame.time.get_ticks() - enemy_spawn_interval * 1000
 
             # destroy all planets when entering one
             planet.kill()
