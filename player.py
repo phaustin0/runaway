@@ -91,6 +91,7 @@ class Player(pygame.sprite.Sprite):
         # planet timer
         self.planet_timer = pygame.time.get_ticks()
         self.time_in_planet = 0
+        self.max_time_in_planet = player_time_in_planet
 
         # planet
         self.planet_image = pygame.image.load('img/planet.png')
@@ -153,6 +154,11 @@ class Player(pygame.sprite.Sprite):
                     if can_buy:
                         self.max_health += 30
                         self.enemy_max_health += 30
+                # increase time in planet
+                if event.key == pygame.K_t:
+                    can_buy = powerup.buy_powerup()
+                    if can_buy:
+                        self.max_time_in_planet += 1.5
 
     # update the player
     def update(self):
@@ -349,7 +355,7 @@ class Player(pygame.sprite.Sprite):
     def draw_planet_bar(self):
         if self.is_in_planet:
             pygame.draw.rect(self.game.screen, darkest_grey, (35, 135, 250, 25))
-            pygame.draw.rect(self.game.screen, darker_grey, (35, 135, (player_time_in_planet - (self.time_in_planet / 1000)) / player_time_in_planet * 250, 25))
+            pygame.draw.rect(self.game.screen, darker_grey, (35, 135, (self.max_time_in_planet - (self.time_in_planet / 1000)) / self.max_time_in_planet * 250, 25))
             self.planet_rect.center = (42, 150)
             self.game.screen.blit(self.planet_image, self.planet_rect)
 
@@ -373,7 +379,7 @@ class Player(pygame.sprite.Sprite):
     def planet_logic(self):
         if self.is_in_planet:
             self.time_in_planet = pygame.time.get_ticks() - self.planet_timer
-            if self.time_in_planet > player_time_in_planet * 1000:  # remove player from planet
+            if self.time_in_planet > self.max_time_in_planet * 1000:  # remove player from planet
                 path = "img/backgrounds/space_background.png"
                 self.bg.change_background(path)
                 self.is_in_planet = False
