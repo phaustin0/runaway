@@ -1,6 +1,7 @@
 # Main file to handle all game logic
 import pygame
 import sys
+from button import *
 from settings import *
 from player import *
 from enemy import *
@@ -28,6 +29,9 @@ class Game:
 
         # powerup
         self.powerup = None
+
+        # font
+        self.font = pygame.font.SysFont('Comic Sans MS', 80)
 
     # create a new game
     def new(self):
@@ -95,12 +99,39 @@ class Game:
             self.draw()
         self.running = False
 
-    # intro screen TODO
+    # intro screen
     def intro_screen(self):
-        pass
+        intro = True
+
+        intro_title = self.font.render('Runaway', True, light_grey)
+        intro_title_rect = intro_title.get_rect(center=(width / 2, 80))
+        play_button = Button(width / 2, height / 2, 200, 60, light_grey, darker_grey, 'Play', 32)
+        
+        background = pygame.image.load('img/backgrounds/space_background.png')
+
+        while intro:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    intro = False
+                    self.running = False
+
+            mouse_pos = pygame.mouse.get_pos()
+            mouse_pressed = pygame.mouse.get_pressed()
+
+            self.screen.blit(background, (0, 0))
+            self.screen.blit(intro_title, intro_title_rect)
+            self.screen.blit(play_button.image, play_button.rect)
+            pygame.display.update()
+
+            if play_button.is_pressed(mouse_pos, mouse_pressed):
+                intro = False
 
     # game over screen TODO
     def game_over(self):
+        pass
+
+    # backstory
+    def backstory(self):
         pass
 
 # check if the file is being run and not imported
@@ -110,6 +141,9 @@ if __name__ == '__main__':
 
     # show the intro screen
     g.intro_screen()
+
+    # show the backstory
+    g.backstory()
 
     # prepare the game
     g.new()
