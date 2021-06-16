@@ -6,6 +6,7 @@ from settings import *
 from player import *
 from enemy import *
 from powerups import *
+from powerup_icon import *
 
 
 # game class
@@ -87,6 +88,22 @@ class Game:
 
         # draw kills
         self.player.draw_kills()
+
+        # draw the powerup icons
+        icons = [
+            'damage',
+            'firerate',
+            'heal',
+            'healtime',
+            'killheal',
+            'maxhealth',
+            'planet',
+            'quid',
+            'speed'
+        ]
+        for i in range(9):
+            path = f'img/powerups/{icons[i]}.png'
+            PowerupIcon(self, i * width / 9, height - 110, path)
 
         # update the screen
         pygame.display.update()
