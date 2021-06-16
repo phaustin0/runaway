@@ -97,7 +97,6 @@ class Game:
             self.player.events()
             self.update()
             self.draw()
-        self.running = False
 
     # intro screen
     def intro_screen(self):
@@ -128,7 +127,31 @@ class Game:
 
     # game over screen TODO
     def game_over(self):
-        pass
+        text = self.font.render('Game Over', True, red)
+        text_rect = text.get_rect(center=(width / 2, 80))
+
+        restart_button = Button(width / 2, height / 2, 200, 60, light_grey, darker_grey, 'Restart', 32)
+        background = pygame.image.load('img/backgrounds/space_background.png')
+
+        for sprite in self.all_sprites:
+            sprite.kill()
+
+        while self.running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+
+            mouse_pos = pygame.mouse.get_pos()
+            mouse_pressed = pygame.mouse.get_pressed()
+
+            if restart_button.is_pressed(mouse_pos, mouse_pressed):
+                self.new()
+                self.main()
+
+            self.screen.blit(background, (0, 0))
+            self.screen.blit(text, text_rect)
+            self.screen.blit(restart_button.image, restart_button.rect)
+            pygame.display.update()
 
     # backstory
     def backstory(self):
