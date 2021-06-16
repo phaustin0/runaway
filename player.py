@@ -1,7 +1,9 @@
 # player class file
 import pygame
 import math
+from random import choice
 from powerups import *
+from planet import *
 from bullet import *
 from background import *
 from quid import *
@@ -29,6 +31,9 @@ enemy_max_health = 300
 
 # quid settings
 quid_multiplier = 10
+
+# planet settings
+planet_spawn_timer = 12
 
 
 class Player(pygame.sprite.Sprite):
@@ -98,6 +103,9 @@ class Player(pygame.sprite.Sprite):
         self.planet_timer = pygame.time.get_ticks()
         self.time_in_planet = 0
         self.max_time_in_planet = player_time_in_planet
+
+        # spawn planet timer
+        self.planet_spawn_timer = pygame.time.get_ticks() - planet_spawn_timer * 1000
 
         # planet
         self.planet_image = pygame.image.load('img/planet.png')
@@ -220,6 +228,9 @@ class Player(pygame.sprite.Sprite):
 
         # spawn enemies
         self.spawn_enemy()
+
+        # spawn planets
+        self.spawn_planet()
 
     # player movement
     def movement(self):
@@ -414,6 +425,32 @@ class Player(pygame.sprite.Sprite):
                 self.reward()
                 for sprite in self.game.enemies:
                     sprite.kill()
+
+    # spawn planets
+    def spawn_planet(self):
+        # possible x positions
+        x_pos_left = {x for x in range(-1500, -500)}
+        x_pos_right = {x for x in range(width + 500, width + 1500)}
+        x_pos = x_pos_left | x_pos_right
+        x_pos = list(x_pos)
+
+        # possible y positions
+        y_pos_left = {y for y in range(-1500, -500)}
+        y_pos_right = {y for y in range(height + 500, height + 1500)}
+        y_pos = list(y_pos_left | y_pos_right)
+        
+        if not self.is_in_planet:
+            time_passed = pygame.time.get_ticks() - self.planet_spawn_timer
+            if time_passed > planet_spawn_timer * 1000:
+                # get the position
+                x = choice(x_pos)
+                y = choice(y_pos)
+
+                # instantiate a planet
+                Planet(self.game, x, y)
+
+                # reset the timer
+                self.planet_spawn_timer = pygame.time.get_ticks()
 
     # spawn enemy
     def spawn_enemy(self):

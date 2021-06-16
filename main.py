@@ -4,7 +4,6 @@ import sys
 from settings import *
 from player import *
 from enemy import *
-from planet import *
 from powerups import *
 
 
@@ -44,10 +43,6 @@ class Game:
         self.planets = pygame.sprite.LayeredUpdates()
 
         self.player = Player(self)
-        Planet(self, 500, 500)
-        Planet(self, 448, 566)
-        Planet(self, 537, 525)
-        Planet(self, 389, 33)
 
     # event handling
     def events(self):
