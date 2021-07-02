@@ -142,7 +142,7 @@ class Game:
             if play_button.is_pressed(mouse_pos, mouse_pressed):
                 intro = False
 
-    # game over screen TODO
+    # game over screen
     def game_over(self):
         text = self.font.render('Game Over', True, red)
         text_rect = text.get_rect(center=(width / 2, 80))
@@ -172,7 +172,25 @@ class Game:
 
     # backstory
     def backstory(self):
-        pass
+        background = pygame.image.load('img/backstory.png')
+        next_button = Button(width - (170 / 2) - 9, height - (50 / 2) - 10, 170, 50, white, green, 'Skip', 24)
+
+        is_running = True
+        while is_running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    is_running = False
+                    self.running = False
+
+            mouse_pos = pygame.mouse.get_pos()
+            mouse_pressed = pygame.mouse.get_pressed()
+
+            if next_button.is_pressed(mouse_pos, mouse_pressed):
+                is_running = False
+
+            self.screen.blit(background, (0, 0))
+            self.screen.blit(next_button.image, next_button.rect)
+            pygame.display.update()
 
 # check if the file is being run and not imported
 if __name__ == '__main__':
