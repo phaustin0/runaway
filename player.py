@@ -92,7 +92,6 @@ class Player(pygame.sprite.Sprite):
         self.arrow = pygame.image.load('img/arrow.png')
         self.og_arrow = self.arrow.copy()
 
-
         self.arrow_rect = self.arrow.get_rect()
 
         # entering planet
@@ -398,6 +397,20 @@ class Player(pygame.sprite.Sprite):
             self.planet_rect.center = (42, 150)
             self.game.screen.blit(self.planet_image, self.planet_rect)
 
+    # draw the prompt to enter planet
+    def draw_enter_planet_prompt(self):
+        # set the font
+        font = pygame.font.SysFont('Comic Sans MS', 25, False)
+
+        prompt_text = font.render("Press 'E' to enter the planet", True, white)
+        prompt_rect = prompt_text.get_rect()
+
+        prompt_rect.centerx = width / 2
+        prompt_rect.centery = height - 200
+
+        self.game.screen.blit(prompt_text, prompt_rect)
+        pygame.display.update()
+
     # enter planet
     def enter_planet(self, planet):
         if self.can_enter_planet:
@@ -479,5 +492,6 @@ class Player(pygame.sprite.Sprite):
         # check if player is on a planet
         planet_hits = pygame.sprite.spritecollide(self, self.game.planets, False)
         if planet_hits:
+            self.draw_enter_planet_prompt()
             self.enter_planet(planet_hits[0])
 
